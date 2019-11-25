@@ -1,0 +1,17 @@
+version: "3"
+services:
+    registry:
+        image: registry
+        container_name: registry
+        ports:
+            - "5000:5000"
+        restart: always
+    registry-frontend:
+        image: konradkleine/docker-registry-frontend:v2
+        container_name: registry-frontend
+        ports:
+            - "80:80"
+        environment:
+            ENV_DOCKER_REGISTRY_HOST: registry
+            ENV_DOCKER_REGISTRY_PORT: 5000
+        restart: always

@@ -1,0 +1,36 @@
+version: "3"
+services:
+    nginx1.16:
+        image: nginx:1.16.0-alpine
+        container_name: nginx1.16.0-alpine
+        ports:
+            - "89:80"
+        links:
+            - "php7.3"
+        volumes:
+            - /Users/zhaobo/Desktop/lnmp/www/:/www
+            - /Users/zhaobo/Desktop/lnmp/app/nginx/conf/:/etc/nginx/conf.d
+        restart: always
+
+    php7.3:
+        image: php:7.3.6-fpm-alpine3.9
+        container_name: php7.3
+        ports:
+            - "9009:9000"
+        links:
+            - "mysql5.6"
+        volumes:
+            - /Users/zhaobo/Desktop/lnmp/www/:/www
+        working_dir: /www
+        restart: always
+
+    mysql5.6:
+        image: mysql:5.6
+        container_name: mysql5.6
+        ports:
+            - "3306:3306"
+        volumes:
+            - /Users/zhaobo/Desktop/lnmp/data/mysql:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234qwer
+        restart: always

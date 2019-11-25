@@ -1,0 +1,22 @@
+version: '3'
+services:
+  gitea-web:
+    image: gitea/gitea:1.8.3
+    volumes:
+        - ./data:/data
+    ports:
+        - "3000:3000"
+        - "22:22"
+    depends_on:
+        - gitea-db
+    restart: always
+  gitea-db:
+    image: mysql:5.6
+    restart: always
+    environment:
+        - MYSQL_ROOT_PASSWORD=1234qwer
+        - MYSQL_DATABASE=gitea
+        - MYSQL_USER=gitea
+        - MYSQL_PASSWORD=1234qwer
+    volumes:
+        - $PWD/db/:/var/lib/mysql
