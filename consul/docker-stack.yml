@@ -1,0 +1,32 @@
+version: "3.0"
+
+services:
+    # consul server，对外暴露的ui接口为8500，只有在2台consul服务器的情况下集群才起作用
+    consulserver:
+        image: consul:latest
+        hostname: consulserver
+        ports:
+            - "8500:8500"
+        environment:
+            - "CONSUL_BIND_INTERFACE=eth0"
+        command: agent -server -client 0.0.0.0 -ui --bootstrap-expect=1
+
+    # consul server1在consul server服务起来后，加入集群中
+    consulserver1:
+        image: consul:latest
+        hostname: consulserver1
+        depends_on:
+            - "consulserver"
+        environment:
+            - "CONSUL_BIND_INTERFACE=eth0"
+        command: agent -server -join consulserver
+
+    # consul server2在consul server服务起来后，加入集群中
+    consulserver2:
+        image: consul:latest
+        hostname: consulserver2
+        depends_on:
+            - "consulserver"
+        environment:
+            - "CONSUL_BIND_INTERFACE=eth0"
+        command: agent -server -join consulserver
